@@ -1,0 +1,43 @@
+CREATE TYPE canon_books AS ENUM ('Old Testament', 'New Testament', 'Book of Mormon', 'Pearl of Great Price', 'Doctrine and Covenants');
+
+CREATE TABLE scripture (
+	scripture_id	int PRIMARY KEY,
+	canon	canon_books DEFAULT 'Book of Mormon',
+	book	varchar(80),
+	chaper	int,
+	verse	int,
+	content	varchar(400)
+);
+
+CREATE TYPE principle_type AS ENUM ('apply', 'ponder', 'promise', 'witness', 'line', 'expound', 'pattern');
+CREATE TYPE principle_target AS ENUM ('verse', 'line', 'word');
+
+CREATE TABLE principle (
+	scripture_id	int REFERENCES scripture(scripture_id),
+	target	principle_target DEFAULT 'verse',
+	start	int DEFAULT -1,
+	ending		int DEFAULT -1,
+	content	text,
+	type 	principle_type DEFAULT 'ponder'
+);
+
+
+CREATE TYPE colors AS ENUM ('red', 'green', 'lightblue', 'yellow', 'orange', 'purple', 'pink', 'brown', 'blue');
+
+CREATE TABLE footnote (
+	scripture_id	int REFERENCES scripture(scripture_id),
+	index	int,
+	content	text,
+	start	int DEFAULT -1,
+	ending		int DEFAULT -1,
+	colors	colors
+);
+
+CREATE TYPE summary_target AS ENUM ('chapter', 'book');
+
+CREATE TABLE summary (
+	target	summary_target DEFAULT 'chapter',
+	content	text,
+	number	int DEFAULT -1,
+	year	text
+);
